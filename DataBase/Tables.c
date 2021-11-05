@@ -2327,9 +2327,12 @@ int Table3()
 
 int main() {
 	system("cls");
+	system("chcp 65001");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(65001);
 	int k = 0, Curr = 0;
 	while (Curr >= 0 || Curr <= 3) {
-		              printf("\n╔══════════╗\n");
+		              printf("╔══════════╗\n");
 		(Curr == 0) ? printf("║Выход     ║<<<\n") : printf("║Выход     ║\n");
 					  printf("╠══════════╣\n");
 		(Curr == 1) ? printf("║Таблица 1 ║<<<\n") : printf("║Таблица 1 ║\n");
