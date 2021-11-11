@@ -320,6 +320,7 @@ int SearchTable1() {
 		system("pause");
 		return 0;
 	}
+	j = 0;
 	printf("|-----т--------------т-------------т-------------т-------------т-------------т---------------|\n");;
 	printf("|  N  |       Модель |    Название | Разработчик | Предприятие |         Тип |      Стоимость|\n");
 	printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
@@ -327,6 +328,7 @@ int SearchTable1() {
 		if (strcmp(Vechicle[i].Model, FirstFieldCheck) == 0) {
 			printf("%s %003i %s %12s %s %11s %s %11s %s %11s %s %11s %s %13s %s\n", "|", i + 1, "|", Vechicle[i].Model, "|", Vechicle[i].Appelation, "|", Vechicle[i].Developer, "|", Vechicle[i].Enterprise, "|", Vechicle[i].Type, "|", Vechicle[i].Cost, "|");
 			printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
+			j++;
 		}
 	}
 	return 0;
@@ -338,14 +340,17 @@ int SearchTable2() {
 		system("pause");
 		return 0;
 	}
+	j = 0;
 	printf("|-----т--------------т--------------т------------------т----------т--------------|\n");
 	printf("|  N  |      Фамилия |          Имя |         Отчество |      Пол | Год рождения |\n");
 	printf("|-----+--------------+--------------+------------------+----------+--------------|\n");
-	for (i = 0; i < NumberTable2; i++)
+	for (i = 0; i < NumberTable2; i++) {
 		if (strcmp(Person[i].Surname, FirstFieldCheck) == 0) {
 			printf("%s %003i %s %12s %s %12s %s %16s %s %8s %s %04s %s\n", "|", i + 1, "|", Person[i].Surname, "|", Person[i].Name, "|", Person[i].Patronymic, "|", Person[i].Gender, "|        ", Person[i].Year, "|");
 			printf("|-----+--------------+--------------+------------------+----------+--------------|\n");
+			j++;
 		}
+	}
 
 	return 0;
 }
@@ -357,14 +362,17 @@ int SearchTable3() {
 		system("pause");
 		return 0;
 	}
+	j = 0;
 	printf("|-----т-------------т----------------т----------------т----------------------|\n");
 	printf("|  N  |    Название | Местоположение |       Директор |    Число сотрудников |\n");
 	printf("|-----+-------------+----------------+----------------+----------------------|\n");
-	for (i = 0; i < NumberTable3; i++)
+	for (i = 0; i < NumberTable3; i++) {
 		if (strcmp(Company[i].CompanyName, FirstFieldCheck) == 0) {
 			printf("%s %003i %s %11s %s %11s %4s %14s %s %20s %s\n", "|", i + 1, "|", Company[i].CompanyName, "|", Company[i].Location, "|", Company[i].Director, "|", Company[i].NumberOfEmployees, "|");
 			printf("|-----+-------------+----------------+----------------+----------------------|\n");
+			j++;
 		}
+	}
 
 	return 0;
 }
@@ -694,26 +702,23 @@ int RemoveTable3() {
 
 int ChangeNumberTable1()//Функция для изменения элемента
 {
-	printf("|-----т--------------т-------------т-------------т-------------т-------------т---------------|\n");
-	printf("|  N  |       Модель |    Название | Разработчик | Предприятие |         Тип |      Стоимость|\n");
-	printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
-	for (i = 0; i < NumberTable1; i++) {
-		printf("%s %003i %s %12s %s %11s %s %11s %s %11s %s %11s %s %13s %s\n", "|", i + 1, "|", Vechicle[i].Model, "|", Vechicle[i].Appelation, "|", Vechicle[i].Developer, "|", Vechicle[i].Enterprise, "|", Vechicle[i].Type, "|", Vechicle[i].Cost, "|");
-		if (i < NumberTable1 - 1)
-			printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
-		else
-			printf("|-----|--------------|-------------|-------------|-------------|-------------|---------------|\n");
-	}
+	PrintTable1();
 	printf("Введите номер изменяемого элемента > ");
-	int a = 0, n = 100; i = 0;
-	for (int x = 0; x < 3; x++) {
-		a = _getch();
-		a = (a - 48) * n;
-		n /= 10;
-		i += a;
-		printf("%d", i);
+	i = 0;
+	while ((ch = getchar()) != '\n')
+		if (ch >= 48 && ch <= 57) {
+			IntValueCheck[i] = ch;
+			i++;
+		}
+	IntValueCheck[i] = '\0';
+	i = 0;
+	value = 0, mul = 1;
+	for (size_t length = strlen(IntValueCheck) - 1; length != -1; length--) {
+		value = IntValueCheck[length] - 48;
+		i += value * mul;
+		mul = mul * 10;
 	}
-	
+	i--;
 	if (i < 1 || i > NumberTable1)//Если номер введеного элемента не существует
 	{                       //То нас перебросит в меню
 		printf("Данный элемент отсутствует");
@@ -782,17 +787,23 @@ int ChangeNumberTable1()//Функция для изменения элемен�
 }
 int ChangeNumberTable2()//Функция для изменения элемента
 {
+	PrintTable2();
 	printf("Введите номер изменяемого элемента > ");
-	int a = 0, n = 100; i = 0;
-	for (int x = 0; x < 3; x++) {
-		a = _getch();
-		a = (a - 48) * n;
-		n /= 10;
-		i += a;
-		printf("%d", i);
+	i = 0;
+	while ((ch = getchar()) != '\n')
+		if (ch >= 48 && ch <= 57) {
+			IntValueCheck[i] = ch;
+			i++;
+		}
+	IntValueCheck[i] = '\0';
+	i = 0;
+	value = 0, mul = 1;
+	for (size_t length = strlen(IntValueCheck) - 1; length != -1; length--) {
+		value = IntValueCheck[length] - 48;
+		i += value * mul;
+		mul = mul * 10;
 	}
-	i--; //Нумерация начинается с 0
-
+	i--;
 	HintTable2();
 	printf("\nВведите фамилию       >> "); fgets(Person[i].Surname, 12, stdin); Person[i].Surname[strlen(Person[i].Surname) - 1] = 0;
 	if (strlen(Person[i].Surname) > 10 || strlen(Person[i].Surname) == 0) {
@@ -847,13 +858,7 @@ int ChangeNumberTable2()//Функция для изменения элемен�
 }
 int ChangeNumberTable3()//Функция для изменения элемента
 {
-	printf(" ---------------------------------------------------------------------------\n");
-	printf("|  N |    Название | Местоположение |       Директор |    Число сотрудников |\n");
-	printf("|----|-------------|----------------|----------------|----------------------|\n");
-	for (i = 0; i < NumberTable3; i++) {
-		printf("%s %02i %s %11s %s %11s %4s %14s %s %20s %s\n", "|", i + 1, "|", Company[i].CompanyName, "|", Company[i].Location, "|", Company[i].Director, "|", Company[i].NumberOfEmployees, "|");
-		printf("|----|-------------|----------------|----------------|----------------------|\n");
-	}
+	PrintTable3();
 	printf("Введите номер изменяемого элемента > ");
 	i = 0;
 	while ((ch = getchar()) != '\n')
@@ -870,7 +875,6 @@ int ChangeNumberTable3()//Функция для изменения элемен�
 		mul = mul * 10;
 	}
 	i--;
-	printf("%d", i);
 	if ((i < 1 || i > NumberTable3))//Если номер введеного элемента не существует
 	{                       //То нас перебросит в меню
 		printf("Данный элемент отсутствует");
@@ -917,7 +921,12 @@ int ChangeNumberTable3()//Функция для изменения элемен�
 }
 
 int ChangeModelTable1() {
-	SearchTable1();
+	SearchTable1(j);
+	if (j == 0) {
+		printf("Записей схожих с %s не найдено", FirstFieldCheck);
+		system("pause");
+		return 0;
+	}
 	printf("Введите номер удаляемого элемента > ");
 	i = 0;
 	while ((ch = getchar()) != '\n')
@@ -992,7 +1001,12 @@ int ChangeModelTable1() {
 	return 0;
 }
 int ChangeSurnameTable2() {
-	SearchTable2();
+	SearchTable2(j);
+	if (j == 0) {
+		printf("Записей схожих с %s не найдено", FirstFieldCheck);
+		system("pause");
+		return 0;
+	}
 	printf("Введите номер удаляемого элемента > ");
 	i = 0;
 	while ((ch = getchar()) != '\n')
@@ -1066,7 +1080,12 @@ int ChangeSurnameTable2() {
 		return 0;
 }
 int ChangeCompanyNameTable3() {
-	SearchTable3();
+	SearchTable3(j);
+	if (j == 0) {
+		printf("Записей схожих с %s не найдено", FirstFieldCheck);
+		system("pause");
+		return 0;
+	}
 	printf("Введите номер удаляемого элемента > ");
 	i = 0;
 	while ((ch = getchar()) != '\n')
