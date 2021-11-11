@@ -57,7 +57,7 @@ int HintTable1() {
 }
 int HintTable2() {
 	system("cls");
-	printf("Подсказка: Для фамилии и имени создано ограничение в 12 символов, для пола в 8 символов, \nдля отчества в 16 символов, для даты рождения в 10 символов");
+	printf("Подсказка: Для фамилии и имени создано ограничение в 12 символов, для пола в 8 символов, \nдля отчества в 16 символов, для даты рождения в 9999 лет");
 	printf("\nПример ввода:"
 		"\nВведите фамилию          >> Иванов"
 		"\nВведите имя              >> Иван"
@@ -215,6 +215,11 @@ int InsertTable1()
 			i++;
 		}
 	IntValueCheck[i] = '\0';
+	if (strlen(IntValueCheck) == 0) {
+		printf("Ошибка ввода, можно вводить только цифры!!!");
+		system("pause");
+		return 0;
+	}
 	strcpy(Vechicle[NumberTable1].Cost, IntValueCheck);
 	NumberTable1++;
 	return 0;
@@ -257,12 +262,22 @@ int InsertTable2()//Функция для ввода информации
 	}
 
 	printf("Введите год рождения     >> ");   i = 0;
-	while ((ch = getchar()) != '\n' && i<4)
+	while ((ch = getchar()) != '\n') {
 		if (ch >= 48 && ch <= 57) {
 			IntValueCheck[i] = ch;
 			i++;
 		}
+	}
 	IntValueCheck[i] = '\0';
+	if (i > 4) {
+		printf("Введено слишком много символов");
+		return 0;
+	}
+	if (strlen(IntValueCheck) == 0) {
+		printf("Ошибка ввода, можно вводить только цифры!!!");
+		system("pause");
+		return 0;
+	}
 		strcpy(Person[NumberTable2].Year, IntValueCheck); //записываем  строку, которую мы проверяли в строку стоимость
 	NumberTable2++;
 
@@ -300,12 +315,17 @@ int InsertTable3()//Функция для ввода информации
 
 	printf("Введите численность сотрудников       >> ");
 	i=0;
-	while ((ch = getchar()) != '\n' && i < 4)
+	while ((ch = getchar()) != '\n')
 		if (ch >= 48 && ch <= 57) {
 			IntValueCheck[i] = ch;
 			i++;
 		}
 	IntValueCheck[i] = '\0';
+	if (strlen(IntValueCheck) == 0) {
+		printf("Ошибка ввода, можно вводить только цифры!!!");
+		system("pause");
+		return 0;
+	}
 	strcpy(Company[NumberTable3].NumberOfEmployees, IntValueCheck);
 	NumberTable3++;
 
@@ -804,7 +824,18 @@ int ChangeNumberTable2()//Функция для изменения элемен�
 		mul = mul * 10;
 	}
 	i--;
+	if ((i < 1 || i > NumberTable2))//Если номер введеного элемента не существует
+	{                       //То нас перебросит в меню
+		printf("Данный элемент отсутствует");
+		system("pause");
+		return 0;
+	}
 	HintTable2();
+	printf("|-----т--------------т--------------т------------------т----------т--------------|\n");
+	printf("|  N  |      Фамилия |          Имя |         Отчество |      Пол | Год рождения |\n");
+	printf("|-----+--------------+--------------+------------------+----------+--------------|\n");
+	printf("%s %003i %s %12s %s %12s %s %16s %s %8s %s %04s %s\n", "|", i + 1, "|", Person[i].Surname, "|", Person[i].Name, "|", Person[i].Patronymic, "|", Person[i].Gender, "|        ", Person[i].Year, "|");
+	printf("|-----+--------------+--------------+------------------+----------+--------------|\n");
 	printf("\nВведите фамилию       >> "); fgets(Person[i].Surname, 12, stdin); Person[i].Surname[strlen(Person[i].Surname) - 1] = 0;
 	if (strlen(Person[i].Surname) > 10 || strlen(Person[i].Surname) == 0) {
 		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
@@ -839,7 +870,7 @@ int ChangeNumberTable2()//Функция для изменения элемен�
 
 		return 0;
 	}
-	int j = 0;
+	j = 0;
 	while (j != strlen(IntValueCheck)) { // проверяем длину строки и состоит ли строка только из цифр
 		if (IntValueCheck[i] >= '0' && IntValueCheck[i] <= '9') { //если символ являяется цифрой, то увеличиваем счетчик на 1
 			j++;
@@ -1308,7 +1339,7 @@ int RecordTable2()//Функция для записи в файл
 	}
 	fprintf(F, "%i\n", NumberTable2);
 	for (i = 0; i < NumberTable2; i++)
-		fprintf(F, "%s\n%s\n%s\n%s\n%s\n", Person[i].Surname, Person[i].Name, Person[i].Patronymic, Person[i].Gender, Person[i].Year);
+		fprintf(F, "%s %s %s %s %04s", Person[i].Surname, Person[i].Name, Person[i].Patronymic, Person[i].Gender, Person[i].Year);
 	fclose(F);
 	printf("Запись в файл выполена успешно\n");
 
@@ -1367,7 +1398,7 @@ int ReadTable2()//Функция для чтения из файла
 
 	fscanf_s(F, "%i", &NumberTable2);
 	for (i = 0; i < NumberTable2; i++) {
-		NofScannedArguments = fscanf(F, "%s\t%s\t%s\t%s\t%04s", Person[i].Surname, Person[i].Name, Person[i].Patronymic, Person[i].Gender, Person[i].Year);
+		NofScannedArguments = fscanf(F, "%s %s %s %s %04s", Person[i].Surname, Person[i].Name, Person[i].Patronymic, Person[i].Gender, Person[i].Year);
 		if (NofScannedArguments == 1) /* should be one number */
 		{
 			return 0; /* failure, assumptions of program are not met */
@@ -1520,7 +1551,7 @@ int SortTable2()
 	
 	Persons Temp;
 	int k = 0, Curr = 0;
-	while (Curr >= 0 || Curr <= 8) {
+	while (Curr >= 0 || Curr <= 5) {
 		              printf("\n|-----------------------------------|\n");
 		(Curr == 0) ? printf("|Выход в главное меню               |<<<\n") : printf("|Выход в главное меню               |\n");
 		              printf("|-----------------------------------|\n");
@@ -1534,16 +1565,14 @@ int SortTable2()
 		              printf("|-----------------------------------|\n");
 		(Curr == 5) ? printf("|Сортировка по типу техники         |<<<\n") : printf("|Сортировка по типу техники         |\n");
 		              printf("|-----------------------------------|\n");
-		(Curr == 6) ? printf("|Сортировка по стоимости            |<<<\n") : printf("|Сортировка по стоимости            |\n");
-		              printf("|-----------------------------------|\n");
 		k = _getch();
 		if (k == 80) {//Обарботка стрелки вверх
-			if (Curr == 8) Curr = 0;
+			if (Curr == 5) Curr = 0;
 			else Curr++;
 		}
 		system("cls");
 		if (k == 72) {//Обработка стрелки вниз
-			if (Curr == 0) Curr = 8;
+			if (Curr == 0) Curr = 5;
 			else Curr--;
 		}
 		system("cls");
@@ -1622,7 +1651,7 @@ int SortTable2()
 int SortTable3() {
 	Companies Temp;
 	int k = 0, Curr = 0;
-	while (Curr >= 0 || Curr <= 8) {
+	while (Curr >= 0 || Curr <= 4) {
 		printf("\n|-----------------------------------|\n");
 		(Curr == 0) ? printf("|Выход в главное меню               |<<<\n") : printf("|Выход в главное меню               |\n");
 		printf("|-----------------------------------|\n");
@@ -1634,18 +1663,14 @@ int SortTable3() {
 		printf("|-----------------------------------|\n");
 		(Curr == 4) ? printf("|Сортировка по предприятию          |<<<\n") : printf("|Сортировка по предприятию          |\n");
 		printf("|-----------------------------------|\n");
-		(Curr == 5) ? printf("|Сортировка по типу техники         |<<<\n") : printf("|Сортировка по типу техники         |\n");
-		printf("|-----------------------------------|\n");
-		(Curr == 6) ? printf("|Сортировка по стоимости            |<<<\n") : printf("|Сортировка по стоимости            |\n");
-		printf("|-----------------------------------|\n");
 		k = _getch();
 		if (k == 80) {//Обарботка стрелки вверх
-			if (Curr == 8) Curr = 0;
+			if (Curr == 4) Curr = 0;
 			else Curr++;
 		}
 		system("cls");
 		if (k == 72) {//Обработка стрелки вниз
-			if (Curr == 0) Curr = 8;
+			if (Curr == 0) Curr = 4;
 			else Curr--;
 		}
 		system("cls");
@@ -1693,14 +1718,21 @@ int SortTable3() {
 				break;
 			case 4:
 				system("cls");
-				for (j = NumberTable3 - 1; j > 0; j--)
-					for (i = 0; i < j; i++)
-						if (strcmp(Company[i].Director, Company[i + 1].Director) > 0)
+				for (j = NumberTable3 - 1; j > 0; j--) {
+					for (i = 0; i < j; i++) {
+						if (strcmp(Company[i].NumberOfEmployees, Company[i + 1].NumberOfEmployees) > 0)
 						{
 							Temp = Company[i];
 							Company[i] = Company[i + 1];
 							Company[i + 1] = Temp;
 						}
+						if (strlen(Company[i].NumberOfEmployees) > strlen(Company[i + 1].NumberOfEmployees)) {
+							Temp = Company[i];
+							Company[i] = Company[i + 1];
+							Company[i + 1] = Temp;
+						}
+					}
+				}
 				PrintTable3();
 				break;
 			}
@@ -1951,8 +1983,10 @@ int main() {
 	system("cls");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
+	
 	int k = 0, Curr = 0;
 	while (Curr >= 0 || Curr <= 3) {
+		printf("Перемещение по меню происходит с помощью стрелок клавиатуры\nВыбор пункта с помощью Enter, выход из программы ESC\n");
 		              printf("|----------|\n");
 		(Curr == 0) ? printf("|Выход     |<<<\n") : printf("|Выход     |\n");
 					  printf("|----------|\n");
@@ -1972,7 +2006,10 @@ int main() {
 			if (Curr == 0) Curr = 3;
 			else Curr--;
 		}
-		system("cls");
+		if (k == 27) {//Обработка стрелки вниз
+			printf("Досвидания :-)");
+			return 0;
+		}
 		if (k == 13) {//Обработка клавиши Enter
 			switch (Curr)
 			{
