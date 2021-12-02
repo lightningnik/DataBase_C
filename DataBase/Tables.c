@@ -43,6 +43,23 @@ Companies Company[999];
 int NumberTable1, NumberTable2, NumberTable3, value, mul, i, j;
 char FirstFieldCheck[12], IntValueCheck[12], ch;
 
+void NumberChoiceСheck() {
+	i = 0;
+	while ((ch = getchar()) != '\n')
+		if (ch >= 48 && ch <= 57) {
+			IntValueCheck[i] = ch;
+			i++;
+		}
+	IntValueCheck[i] = '\0';
+	i = 0;
+	value = 0, mul = 1;
+	for (size_t length = strlen(IntValueCheck) - 1; length != -1; length--) {
+		value = IntValueCheck[length] - 48;
+		i += value * mul;
+		mul = mul * 10;
+	}
+}
+
 int HintTable1() {
 	system("cls");	//Очистка экрана
 	printf("Подсказка:\nДля модели, названия, фамилии разработчика, названия предприятия и типа техники создано ограничение в 10 символов,\nДля стоимости техники создано ограничение в 1000000");
@@ -77,87 +94,97 @@ int HintTable3() {
 	return 0;
 }
 
-/*int PrintTable1() //Функция для вывода информации
-{
-	printf("|-----т--------------т-------------т-------------т-------------т-------------т---------------|\n");
-	printf("|  N  |       Модель |    Название | Разработчик | Предприятие |         Тип |     Стоимость |\n");
-	printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
-	for (i = 0; i < NumberTable1; i++) {
-		printf("%s %003i %s %12s %s %11s %s %11s %s %11s %s %11s %s %13s %s\n", "|", i + 1, "|", Vechicle[i].Model, "|", Vechicle[i].Appelation, "|", Vechicle[i].Developer, "|", Vechicle[i].Enterprise, "|", Vechicle[i].Type, "|", Vechicle[i].Cost, "|");
-		printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
-		}
-	return 0;
-}*/
-
-void PrintTable1() {
-	int i = 0, page = 10, ch = 0, a; //Setting the counter
-	while (ch != 1) {
+int PrintTable1() {
+	int k = 0, Curr = 1;
+	while (Curr >= 1 || Curr <= 10) {
 		printf("|-----т--------------т-------------т-------------т-------------т-------------т---------------|\n");
 		printf("|   N |       Модель |    Название | Разработчик | Предприятие |         Тип |     Стоимость |\n");
 		printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
-		for (; i < page && i < NumberTable1; i++) { //Setting the "for" counter to output array elements by number
+		for (i = (Curr * 10) - 10; i < (Curr * 10) && i < NumberTable1; i++) { //S-etting the "for" counter to output array elements by number
 			printf("%s %003i %s %12s %s %11s %s %11s %s %11s %s %11s %s %13s %s\n", "|", i + 1, "|", Vechicle[i].Model, "|", Vechicle[i].Appelation, "|", Vechicle[i].Developer, "|", Vechicle[i].Enterprise, "|", Vechicle[i].Type, "|", Vechicle[i].Cost, "|");
 			printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
 		}
-		printf("Last page - LEFT (<-) | Next page - RIGHT (->) | Exit - BACKSPACE\n");
-		a = _getch();
-		if (a == 72) {
-			if (i > 11 && i != NumberTable1) {
-				i -= 20;
-				page -= 10;
-				ch = 0;
-			}
-			else if (i == 10) {
-				i = 0;
-				page = 10;
-				ch = 0;
-			}
-			else if (i >= NumberTable1) {
-				page = i - (i%10);
-				i = page - 10;
-				ch = 0;
-			}
-			system("cls");
+		printf("\n|----------------|  |--------------------------------------------------------------------------------|\n");
+		printf("|  Страница %02d   |  |След. страница - стрелка вниз, предыдущая страница - стрелка вверх, выход - ESC |\n", Curr);
+		printf("|----------------|  |--------------------------------------------------------------------------------|\n");
+		k = _getch();
+		system("cls");
+		if (k == 80) {//Обарботка стрелки вверх
+			if (Curr == 10) Curr = 1;
+			else Curr++;
 		}
-		else if (a == 80) {
-			if (i > NumberTable1) {
-				i = 0;
-				page = 10;
-				ch = 0;
-			}
-			else {
-				page += 10;
-				ch = 0;
-			}
-			system("cls");
+		if (k == 72) {//Обработка стрелки вниз
+			if (Curr == 1) Curr = 10;
+			else Curr--;
 		}
-		else if (a == 27) {
-			ch = 1;
+		if (k == 27) {//Обработка клавиши ESC
+			return 0;
 		}
 	}
-	a = _getch();
+
+	return Curr;
 }
 int PrintTable2()//Функция для вывода информации
 {
-	printf("|-----т--------------т--------------т------------------т----------т--------------|\n");
-	printf("|  N  |      Фамилия |          Имя |         Отчество |      Пол | Год рождения |\n");
-	printf("|-----+--------------+--------------+------------------+----------+--------------|\n");
-	for (i = 0; i < NumberTable2; i++) {
-	printf("%s %003i %s %12s %s %12s %s %16s %s %8s %s %04s %s\n", "|", i + 1, "|", Person[i].Surname, "|", Person[i].Name, "|", Person[i].Patronymic, "|", Person[i].Gender, "|        ", Person[i].Year, "|");
-	printf("|-----+--------------+--------------+------------------+----------+--------------|\n");
+	int k = 0, Curr = 1;
+	while (Curr >= 1 || Curr <= 10) {
+		printf("|-----т--------------т--------------т------------------т----------т--------------|\n");
+		printf("|  N  |      Фамилия |          Имя |         Отчество |      Пол | Год рождения |\n");
+		printf("|-----+--------------+--------------+------------------+----------+--------------|\n");
+		for (i = (Curr * 10) - 10; i < (Curr * 10) && i < NumberTable2; i++) { //S-etting the "for" counter to output array elements by number
+			printf("%s %003i %s %12s %s %12s %s %16s %s %8s %s %04s %s\n", "|", i + 1, "|", Person[i].Surname, "|", Person[i].Name, "|", Person[i].Patronymic, "|", Person[i].Gender, "|        ", Person[i].Year, "|");
+			printf("|-----+--------------+--------------+------------------+----------+--------------|\n");
+		}
+		printf("\n|----------------|  |--------------------------------------------------------------------------------|\n");
+		printf("|  Страница %02d   |  |След. страница - стрелка вниз, предыдущая страница - стрелка вверх, выход - ESC |\n", Curr);
+		printf("|----------------|  |--------------------------------------------------------------------------------|\n");
+		k = _getch();
+		system("cls");
+		if (k == 80) {//Обарботка стрелки вверх
+			if (Curr == 10) Curr = 1;
+			else Curr++;
+		}
+		if (k == 72) {//Обработка стрелки вниз
+			if (Curr == 1) Curr = 10;
+			else Curr--;
+		}
+		if (k == 27) {//Обработка клавиши ESC
+			return 0;
+		}
 	}
-	return 0;
+
+	return Curr;
 }
 int PrintTable3()//Функция для вывода информации
 {
-	printf("|-----т-------------т----------------т----------------т----------------------|\n");
-	printf("|  N  |    Название | Местоположение |       Директор |    Число сотрудников |\n");
-	printf("|-----+-------------+----------------+----------------+----------------------|\n");
-	for (i = 0; i < NumberTable3; i++) {
-		printf("%s %003i %s %11s %s %11s %4s %14s %s %20s %s\n", "|", i + 1, "|", Company[i].CompanyName, "|", Company[i].Location, "|", Company[i].Director, "|", Company[i].NumberOfEmployees, "|");
-	printf("|-----+-------------+----------------+----------------+----------------------|\n");
+	int k = 0, Curr = 1;
+	while (Curr >= 1 || Curr <= 10) {
+		printf("|-----т-------------т----------------т----------------т----------------------|\n");
+		printf("|  N  |    Название | Местоположение |       Директор |    Число сотрудников |\n");
+		printf("|-----+-------------+----------------+----------------+----------------------|\n");
+		for (i = (Curr * 10) - 10; i < (Curr * 10) && i < NumberTable3; i++) { //S-etting the "for" counter to output array elements by number
+			printf("%s %003i %s %11s %s %11s %4s %14s %s %20s %s\n", "|", i + 1, "|", Company[i].CompanyName, "|", Company[i].Location, "|", Company[i].Director, "|", Company[i].NumberOfEmployees, "|");
+			printf("|-----+-------------+----------------+----------------+----------------------|\n");
+		}
+		printf("\n|----------------|  |--------------------------------------------------------------------------------|\n");
+		printf("|  Страница %02d   |  |След. страница - стрелка вниз, предыдущая страница - стрелка вверх, выход - ESC |\n", Curr);
+		printf("|----------------|  |--------------------------------------------------------------------------------|\n");
+		k = _getch();
+		system("cls");
+		if (k == 80) {//Обарботка стрелки вверх
+			if (Curr == 10) Curr = 1;
+			else Curr++;
+		}
+		if (k == 72) {//Обработка стрелки вниз
+			if (Curr == 1) Curr = 10;
+			else Curr--;
+		}
+		if (k == 27) {//Обработка клавиши ESC
+			return 0;
+		}
 	}
-	return 0;
+
+	return Curr;
 }
 
 int InsertTable1()
@@ -207,15 +234,15 @@ int InsertTable1()
 	if (i >= 0 && i < NumberTable2) {
 		strcpy(Vechicle[NumberTable1].Developer, Person[i].Surname);
 	}
-	else { 
-    i++;
-	printf("Элемент с номером %i не существует\n",i); 
-	system("pause");
-	return 0;
+	else {
+		i++;
+		printf("Элемент с номером %i не существует\n", i);
+		system("pause");
+		return 0;
 	}
 
 	HintTable1();
-	printf("\nВведите модель техники       >> %s",Vechicle[NumberTable1].Model);
+	printf("\nВведите модель техники       >> %s", Vechicle[NumberTable1].Model);
 	printf("\nВведите название техники     >> %s", Vechicle[NumberTable1].Appelation);
 	printf("\nВведите фамилию разработчика >> %s", Vechicle[NumberTable1].Developer);
 	system("cls");
@@ -229,8 +256,8 @@ int InsertTable1()
 		}
 	IntValueCheck[i] = '\0';
 	i = 0;
-	value = 0,mul = 1;
-	for (size_t length = strlen(IntValueCheck)-1; length !=-1; length--) {
+	value = 0, mul = 1;
+	for (size_t length = strlen(IntValueCheck) - 1; length != -1; length--) {
 		value = IntValueCheck[length] - 48;
 		i += value * mul;
 		mul = mul * 10;
@@ -241,7 +268,7 @@ int InsertTable1()
 	}
 	else {
 		i++;
-		printf("Элемент с номером %i не существует\n",i);
+		printf("Элемент с номером %i не существует\n", i);
 		system("pause");
 		return 0;
 	}
@@ -256,19 +283,14 @@ int InsertTable1()
 		system("pause");
 		return 0;
 	}
-	printf("Введите стоимость техники    >> ");   
-    i = 0;
+	printf("Введите стоимость техники    >> ");
+	i = 0;
 	while ((ch = getchar()) != '\n')
 		if (ch >= 48 && ch <= 57) {
 			IntValueCheck[i] = ch;
 			i++;
 		}
 	IntValueCheck[i] = '\0';
-	if (strlen(IntValueCheck) == 0) {
-		printf("Ошибка ввода, можно вводить только цифры!!!");
-		system("pause");
-		return 0;
-	}
 	strcpy(Vechicle[NumberTable1].Cost, IntValueCheck);
 	NumberTable1++;
 	return 0;
@@ -311,23 +333,13 @@ int InsertTable2()//Функция для ввода информации
 	}
 
 	printf("Введите год рождения     >> ");   i = 0;
-	while ((ch = getchar()) != '\n') {
+	while ((ch = getchar()) != '\n' && i < 4)
 		if (ch >= 48 && ch <= 57) {
 			IntValueCheck[i] = ch;
 			i++;
 		}
-	}
 	IntValueCheck[i] = '\0';
-	if (i > 4) {
-		printf("Введено слишком много символов");
-		return 0;
-	}
-	if (strlen(IntValueCheck) == 0) {
-		printf("Ошибка ввода, можно вводить только цифры!!!");
-		system("pause");
-		return 0;
-	}
-		strcpy(Person[NumberTable2].Year, IntValueCheck); //записываем  строку, которую мы проверяли в строку стоимость
+	strcpy(Person[NumberTable2].Year, IntValueCheck); //записываем  строку, которую мы проверяли в строку стоимость
 	NumberTable2++;
 
 	return 0;
@@ -363,20 +375,13 @@ int InsertTable3()//Функция для ввода информации
 	}
 
 	printf("Введите численность сотрудников       >> ");
-	i=0;
-	while ((ch = getchar()) != '\n') {
+	i = 0;
+	while ((ch = getchar()) != '\n' && i < 4)
 		if (ch >= 48 && ch <= 57) {
 			IntValueCheck[i] = ch;
 			i++;
 		}
-	}
-	
 	IntValueCheck[i] = '\0';
-	if (strlen(IntValueCheck) == 0) {
-		printf("Ошибка ввода, можно вводить только цифры!!!");
-		system("pause");
-		return 0;
-	}
 	strcpy(Company[NumberTable3].NumberOfEmployees, IntValueCheck);
 	NumberTable3++;
 
@@ -450,33 +455,11 @@ int SearchTable3() {
 
 int RemoveNumberTable1()
 {
-	printf("|-----т--------------т-------------т-------------т-------------т-------------т---------------|\n");
-	printf("|  N  |       Модель |    Название | Разработчик | Предприятие |         Тип |      Стоимость|\n");
-	printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
-	for (i = 0; i < NumberTable1; i++) {
-		printf("%s %03i %s %12s %s %11s %s %11s %s %11s %s %11s %s %13s %s\n", "|", i + 1, "|", Vechicle[i].Model, "|", Vechicle[i].Appelation, "|", Vechicle[i].Developer, "|", Vechicle[i].Enterprise, "|", Vechicle[i].Type, "|", Vechicle[i].Cost, "|");
-		if (i < NumberTable1 - 1)
-			printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
-		else
-			printf("|-----|--------------|-------------|-------------|-------------|-------------|---------------|\n");
-	}
+	PrintTable1();
 
 	printf("Введите номер удаляемого элемента > ");
 
-	i = 0;
-	while ((ch = getchar()) != '\n')
-		if (ch >= 48 && ch <= 57) {
-			IntValueCheck[i] = ch;
-			i++;
-		}
-	IntValueCheck[i] = '\0';
-	i = 0;
-	value = 0, mul = 1;
-	for (size_t length = strlen(IntValueCheck) - 1; length != -1; length--) {
-		value = IntValueCheck[length] - 48;
-		i += value * mul;
-		mul = mul * 10;
-	}
+	NumberChoiceСheck(i);
 		if (i < 1 || i > NumberTable1)//Если номер введеного элемента не существует
 	{                       //То нас перебросит в меню
 		printf("Данный элемент отсутствует");
@@ -494,22 +477,8 @@ int RemoveNumberTable1()
 int RemoveNumberTable2() //Функция для удаления элементов
 {
 PrintTable2();
-
 	printf("Введите номер удаляемого элемента > ");
-	i = 0;
-	while ((ch = getchar()) != '\n')
-		if (ch >= 48 && ch <= 57) {
-			IntValueCheck[i] = ch;
-			i++;
-		}
-	IntValueCheck[i] = '\0';
-	i = 0;
-	value = 0, mul = 1;
-	for (size_t length = strlen(IntValueCheck) - 1; length != -1; length--) {
-		value = IntValueCheck[length] - 48;
-		i += value * mul;
-		mul = mul * 10;
-	}
+	NumberChoiceСheck(i);
 	if (i < 1 || i > NumberTable2)//Если номер введеного элемента не существует
 	{                       //То нас перебросит в меню
 		printf("Данный элемент отсутствует");
@@ -527,34 +496,17 @@ PrintTable2();
 int RemoveNumberTable3() //Функция для удаления элементов
 {
 	PrintTable3();
-
 	printf("Введите номер удаляемого элемента > ");
-	i = 0;
-	while ((ch = getchar()) != '\n')
-		if (ch >= 48 && ch <= 57) {
-			IntValueCheck[i] = ch;
-			i++;
-		}
-	IntValueCheck[i] = '\0';
-	i = 0;
-	value = 0, mul = 1;
-	for (size_t length = strlen(IntValueCheck) - 1; length != -1; length--) {
-		value = IntValueCheck[length] - 48;
-		i += value * mul;
-		mul = mul * 10;
-	}
+	NumberChoiceСheck(i);
 	if (i < 1 || i > NumberTable3)//Если номер введеного элемента не существует
 	{                       //То нас перебросит в меню
 		printf("Данный элемент отсутствует");
 		system("pause");
 		return 0;
 	}
-
 	for (i--; i < NumberTable3 - 1; i++)
 		Company[i] = Company[i + 1];
-
 	NumberTable3--;
-
 	return 0;
 }
 
@@ -566,22 +518,7 @@ int RemoveModelTable1() {
 			return 0;
 		}
 		printf("Введите номер удаляемого элемента > ");
-		i = 0;
-		while ((ch = getchar()) != '\n')
-			if (ch >= 48 && ch <= 57) 
-			{
-				IntValueCheck[i] = ch;
-				i++;
-			}
-		IntValueCheck[i] = '\0';
-		i = 0;
-		value = 0, mul = 1;
-		for (size_t length = strlen(IntValueCheck) - 1; length != -1; length--) 
-		{
-			value = IntValueCheck[length] - 48;
-			i += value * mul;
-			mul = mul * 10;
-		}
+		NumberChoiceСheck(i);
 		if (i < 1 || i > NumberTable1 || strcmp(Vechicle[i].Model, FirstFieldCheck) == 0)//Если номер введеного элемента не существует
 		{                       //То нас перебросит в меню
 			printf("Данный элемент отсутствует\n");
@@ -601,22 +538,7 @@ int RemoveSurnameTable2() {
 		return 0;
 	}
 		printf("Введите номер удаляемого элемента > ");
-		i = 0;
-		while ((ch = getchar()) != '\n')
-			if (ch >= 48 && ch <= 57) 
-			{
-				IntValueCheck[i] = ch;
-				i++;
-			}
-		IntValueCheck[i] = '\0';
-		i = 0;
-		value = 0, mul = 1;
-		for (size_t length = strlen(IntValueCheck) - 1; length != -1; length--) 
-		{
-			value = IntValueCheck[length] - 48;
-			i += value * mul;
-			mul = mul * 10;
-		}
+		NumberChoiceСheck(i);
 		if (i < 1 || i > NumberTable2 || strcmp(Person[i].Surname, FirstFieldCheck) == 0)//Если номер введеного элемента не существует
 		{                       //То нас перебросит в меню
 			printf("Данный элемент отсутствует/Выбран элемент, не представленный в списке");
@@ -638,22 +560,7 @@ int RemoveCompanyNameTable3() {
 		return 0;
 	}
 	printf("Введите номер удаляемого элемента > ");
-	i = 0;
-	while ((ch = getchar()) != '\n')
-		if (ch >= 48 && ch <= 57) 
-		{
-			IntValueCheck[i] = ch;
-			i++;
-		}
-	IntValueCheck[i] = '\0';
-	i = 0;
-	value = 0, mul = 1;
-	for (size_t length = strlen(IntValueCheck) - 1; length != -1; length--) 
-	{
-		value = IntValueCheck[length] - 48;
-		i += value * mul;
-		mul = mul * 10;
-	}
+	NumberChoiceСheck(i);
 	if (i < 1 || i > NumberTable3 || strcmp(Company[i].CompanyName, FirstFieldCheck) == 0)//Если номер введеного элемента не существует
 		{                       //То нас перебросит в меню
 			printf("Данный элемент отсутствует");
@@ -837,37 +744,37 @@ int ChangeNumberTable1()//Функция для изменения элемен�
 	//
 	if (strlen(Vechicle[i].Model) > 10 || strlen(Vechicle[i].Model) == 0) {
 		printf("Ошибка ввода\nполе было оставлено пустым, или превышенно допустимое количество символов");
-		
+
 		return 0;
 	}
 	printf("Введите название техники     >> ");   fgets(Vechicle[i].Appelation, 12, stdin); Vechicle[i].Appelation[strlen(Vechicle[i].Appelation) - 1] = 0;
 	if (strlen(Vechicle[i].Appelation) > 10 || strlen(Vechicle[i].Appelation) == 0) {
 		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-		
+
 		return 0;
 	}
 	printf("Введите фамилию разработчика >> ");   fgets(Vechicle[i].Developer, 12, stdin); Vechicle[i].Developer[strlen(Vechicle[i].Developer) - 1] = 0;
 	if (strlen(Vechicle[i].Developer) > 10 || strlen(Vechicle[i].Developer) == 0) {
 		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-		
+
 		return 0;
 	}
 	printf("Введите название предприятия >> ");   fgets(Vechicle[i].Enterprise, 12, stdin); Vechicle[i].Enterprise[strlen(Vechicle[i].Enterprise) - 1] = 0;
 	if (strlen(Vechicle[i].Enterprise) > 10 || strlen(Vechicle[i].Enterprise) == 0) {
 		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-		
+
 		return 0;
 	}
 	printf("Введите тип техники          >> ");   fgets(Vechicle[i].Type, 12, stdin); Vechicle[i].Type[strlen(Vechicle[i].Type) - 1] = 0;
 	if (strlen(Vechicle[i].Type) > 10 || strlen(Vechicle[i].Type) == 0) {
 		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-		
+
 		return 0;
 	}
 	printf("Введите стоимость техники    >> ");   fgets(IntValueCheck, 12, stdin); IntValueCheck[strlen(IntValueCheck) - 1] = 0;
 	if (strlen(IntValueCheck) > 10 || strlen(IntValueCheck) == 0) {
 		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-		
+
 		return 0;
 	}
 	int j = 0;
@@ -878,12 +785,12 @@ int ChangeNumberTable1()//Функция для изменения элемен�
 		else { // иначе повторяем попытку ввода, пока все символы не будут равны цифрам
 			j = 0;
 			printf("Ошибка ввода, могут быть введены только цифры!!!");
-			
+
 			return 0;
 		}
 		strcpy(Vechicle[i].Cost, IntValueCheck); //записываем  строку, которую мы проверяли в строку стоимость
 	}
-	
+
 	return 0;
 }
 int ChangeNumberTable2()//Функция для изменения элемента
@@ -997,7 +904,7 @@ int ChangeNumberTable3()//Функция для изменения элемен�
 	printf(" ---------------------------------------------------------------------------\n");
 	printf("|  N |    Название | Местоположение |       Директор |    Число сотрудников |\n");
 	printf("|----|-------------|----------------|----------------|----------------------|\n");
-	printf("%s %02i %s %11s %s %11s %4s %14s %s %20s %s\n", "|", i+1, "|", Company[i].CompanyName, "|", Company[i].Location, "|", Company[i].Director, "|", Company[i].NumberOfEmployees, "|");
+	printf("%s %02i %s %11s %s %11s %4s %14s %s %20s %s\n", "|", i + 1, "|", Company[i].CompanyName, "|", Company[i].Location, "|", Company[i].Director, "|", Company[i].NumberOfEmployees, "|");
 	printf("|----|-------------|----------------|----------------|----------------------|\n");
 	printf("\nВведите название компании             >> "); fgets(Company[i].CompanyName, 12, stdin); Company[i].CompanyName[strlen(Company[i].CompanyName) - 1] = 0;
 	if (strlen(Company[i].CompanyName) > 10 || strlen(Company[i].CompanyName) == 0) {
@@ -1020,7 +927,7 @@ int ChangeNumberTable3()//Функция для изменения элемен�
 		return 0;
 	}
 
-	printf("Введите численность сотрудников       >> "); 
+	printf("Введите численность сотрудников       >> ");
 	j = 0;
 	while ((ch = getchar()) != '\n' && j < 4)
 		if (ch >= 48 && ch <= 57) {
@@ -1071,45 +978,45 @@ int ChangeModelTable1() {
 	printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
 	printf("%s %003i %s %12s %s %11s %s %11s %s %11s %s %11s %s %13s %s\n", "|", i + 1, "|", Vechicle[i].Model, "|", Vechicle[i].Appelation, "|", Vechicle[i].Developer, "|", Vechicle[i].Enterprise, "|", Vechicle[i].Type, "|", Vechicle[i].Cost, "|");
 	printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
-		printf("\nВведите модель техники       >> "); fgets(Vechicle[i].Model, 12, stdin); Vechicle[i].Model[strlen(Vechicle[i].Model) - 1] = 0;
-		if (strlen(Vechicle[i].Model) > 10 || strlen(Vechicle[i].Model) == 0) {
-			printf("Ошибка ввода\nполе было оставлено пустым, или превышенно допустимое количество символов");
-			
-			return 0;
+	printf("\nВведите модель техники       >> "); fgets(Vechicle[i].Model, 12, stdin); Vechicle[i].Model[strlen(Vechicle[i].Model) - 1] = 0;
+	if (strlen(Vechicle[i].Model) > 10 || strlen(Vechicle[i].Model) == 0) {
+		printf("Ошибка ввода\nполе было оставлено пустым, или превышенно допустимое количество символов");
+
+		return 0;
+	}
+	printf("Введите название техники       >> ");   fgets(Vechicle[i].Appelation, 12, stdin); Vechicle[i].Appelation[strlen(Vechicle[i].Appelation) - 1] = 0;
+	if (strlen(Vechicle[i].Appelation) > 10 || strlen(Vechicle[i].Appelation) == 0) {
+		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+
+		return 0;
+	}
+	printf("Введите фамилию разработчика   >> ");   fgets(Vechicle[i].Developer, 12, stdin); Vechicle[i].Developer[strlen(Vechicle[i].Developer) - 1] = 0;
+	if (strlen(Vechicle[i].Developer) > 10 || strlen(Vechicle[i].Developer) == 0) {
+		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+
+		return 0;
+	}
+	printf("Введите название предприятия   >> ");   fgets(Vechicle[i].Enterprise, 12, stdin); Vechicle[i].Enterprise[strlen(Vechicle[i].Enterprise) - 1] = 0;
+	if (strlen(Vechicle[i].Enterprise) > 10 || strlen(Vechicle[i].Enterprise) == 0) {
+		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+
+		return 0;
+	}
+	printf("Введите тип техники            >> ");   fgets(Vechicle[i].Type, 12, stdin); Vechicle[i].Type[strlen(Vechicle[i].Type) - 1] = 0;
+	if (strlen(Vechicle[i].Type) > 10 || strlen(Vechicle[i].Type) == 0) {
+		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+
+		return 0;
+	}
+	printf("Введите стоимость техники      >> ");
+	j = 0;
+	while ((ch = getchar()) != '\n' && j < 4)
+		if (ch >= 48 && ch <= 57) {
+			IntValueCheck[j] = ch;
+			j++;
 		}
-		printf("Введите название техники       >> ");   fgets(Vechicle[i].Appelation, 12, stdin); Vechicle[i].Appelation[strlen(Vechicle[i].Appelation) - 1] = 0;
-		if (strlen(Vechicle[i].Appelation) > 10 || strlen(Vechicle[i].Appelation) == 0) {
-			printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-			
-			return 0;
-		}
-		printf("Введите фамилию разработчика   >> ");   fgets(Vechicle[i].Developer, 12, stdin); Vechicle[i].Developer[strlen(Vechicle[i].Developer) - 1] = 0;
-		if (strlen(Vechicle[i].Developer) > 10 || strlen(Vechicle[i].Developer) == 0) {
-			printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-			
-			return 0;
-		}
-		printf("Введите название предприятия   >> ");   fgets(Vechicle[i].Enterprise, 12, stdin); Vechicle[i].Enterprise[strlen(Vechicle[i].Enterprise) - 1] = 0;
-		if (strlen(Vechicle[i].Enterprise) > 10 || strlen(Vechicle[i].Enterprise) == 0) {
-			printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-			
-			return 0;
-		}
-		printf("Введите тип техники            >> ");   fgets(Vechicle[i].Type, 12, stdin); Vechicle[i].Type[strlen(Vechicle[i].Type) - 1] = 0;
-		if (strlen(Vechicle[i].Type) > 10 || strlen(Vechicle[i].Type) == 0) {
-			printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-			
-			return 0;
-		}
-		printf("Введите стоимость техники      >> ");   
-		j = 0;
-		while ((ch = getchar()) != '\n' && j < 4)
-			if (ch >= 48 && ch <= 57) {
-				IntValueCheck[j] = ch;
-				j++;
-			}
-		IntValueCheck[j] = '\0';
-			strcpy(Vechicle[i].Cost, IntValueCheck); //записываем  строку, которую мы проверяли в строку стоимость
+	IntValueCheck[j] = '\0';
+	strcpy(Vechicle[i].Cost, IntValueCheck); //записываем  строку, которую мы проверяли в строку стоимость
 	return 0;
 }
 int ChangeSurnameTable2() {
@@ -1142,54 +1049,54 @@ int ChangeSurnameTable2() {
 		return 0;
 	}
 	if (strcmp(Person[i].Surname, FirstFieldCheck) != 0) {
-		printf("Под номером %d записи с фамилией %s не существует\n", i+1, FirstFieldCheck);
+		printf("Под номером %d записи с фамилией %s не существует\n", i + 1, FirstFieldCheck);
 		system("pause");
 		return 0;
 	}
-		HintTable2();
-		printf("|-----т--------------т-------------т-------------т-------------т-------------т---------------|\n");
-		printf("|  N |      Фамилия |          Имя |         Отчество |      Пол |  Дата рождения |\n");
-		printf("|----|--------------|--------------|------------------|----------|----------------|\n");
-		printf("%s %002i %s %12s %s %12s %s %16s %s %8s %s %04s %11s\n", "|", i+1, "|", Person[i].Surname, "|", Person[i].Name, "|", Person[i].Patronymic, "|", Person[i].Gender, "|", Person[i].Year, "|");
-		printf("|----|--------------|--------------|------------------|----------|----------------|\n");
-		printf("\nВведите фамилию       >> "); fgets(Person[i].Surname, 12, stdin); Person[i].Surname[strlen(Person[i].Surname) - 1] = 0;
-		if (strlen(Person[i].Surname) > 10 || strlen(Person[i].Surname) == 0) {
-			printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+	HintTable2();
+	printf("|-----т--------------т-------------т-------------т-------------т-------------т---------------|\n");
+	printf("|  N |      Фамилия |          Имя |         Отчество |      Пол |  Дата рождения |\n");
+	printf("|----|--------------|--------------|------------------|----------|----------------|\n");
+	printf("%s %002i %s %12s %s %12s %s %16s %s %8s %s %04s %11s\n", "|", i + 1, "|", Person[i].Surname, "|", Person[i].Name, "|", Person[i].Patronymic, "|", Person[i].Gender, "|", Person[i].Year, "|");
+	printf("|----|--------------|--------------|------------------|----------|----------------|\n");
+	printf("\nВведите фамилию       >> "); fgets(Person[i].Surname, 12, stdin); Person[i].Surname[strlen(Person[i].Surname) - 1] = 0;
+	if (strlen(Person[i].Surname) > 10 || strlen(Person[i].Surname) == 0) {
+		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
 
-			return 0;
-		}
-
-		printf("Введите имя           >> "); fgets(Person[i].Name, 12, stdin); Person[i].Name[strlen(Person[i].Name) - 1] = 0;
-		if (strlen(Person[i].Name) > 10 || strlen(Person[i].Name) == 0) {
-			printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-
-			return 0;
-		}
-
-		printf("Введите отчество      >> "); fgets(Person[i].Patronymic, 17, stdin); Person[i].Patronymic[strlen(Person[i].Patronymic) - 1] = 0;
-		if (strlen(Person[i].Patronymic) > 15 || strlen(Person[i].Patronymic) == 0) {
-			printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-
-			return 0;
-		}
-
-		printf("Введите пол           >> "); fgets(Person[i].Gender, 11, stdin); Person[i].Gender[strlen(Person[i].Gender) - 1] = 0;
-		if (strlen(Person[i].Gender) > 10 || strlen(Person[i].Gender) == 0) {
-			printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-
-			return 0;
-		}
-
-		printf("Введите год рождения    >> ");   
-		j = 0;
-		while ((ch = getchar()) != '\n' && j < 4)
-			if (ch >= 48 && ch <= 57) {
-				IntValueCheck[j] = ch;
-				j++;
-			}
-		IntValueCheck[j] = '\0';
-			strcpy(Person[i].Year, IntValueCheck); //записываем  строку, которую мы проверяли в строку стоимость
 		return 0;
+	}
+
+	printf("Введите имя           >> "); fgets(Person[i].Name, 12, stdin); Person[i].Name[strlen(Person[i].Name) - 1] = 0;
+	if (strlen(Person[i].Name) > 10 || strlen(Person[i].Name) == 0) {
+		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+
+		return 0;
+	}
+
+	printf("Введите отчество      >> "); fgets(Person[i].Patronymic, 17, stdin); Person[i].Patronymic[strlen(Person[i].Patronymic) - 1] = 0;
+	if (strlen(Person[i].Patronymic) > 15 || strlen(Person[i].Patronymic) == 0) {
+		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+
+		return 0;
+	}
+
+	printf("Введите пол           >> "); fgets(Person[i].Gender, 11, stdin); Person[i].Gender[strlen(Person[i].Gender) - 1] = 0;
+	if (strlen(Person[i].Gender) > 10 || strlen(Person[i].Gender) == 0) {
+		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+
+		return 0;
+	}
+
+	printf("Введите год рождения    >> ");
+	j = 0;
+	while ((ch = getchar()) != '\n' && j < 4)
+		if (ch >= 48 && ch <= 57) {
+			IntValueCheck[j] = ch;
+			j++;
+		}
+	IntValueCheck[j] = '\0';
+	strcpy(Person[i].Year, IntValueCheck); //записываем  строку, которую мы проверяли в строку стоимость
+	return 0;
 }
 int ChangeCompanyNameTable3() {
 	SearchTable3(j);
@@ -1225,41 +1132,40 @@ int ChangeCompanyNameTable3() {
 		system("pause");
 		return 0;
 	}
-		printf(" ---------------------------------------------------------------------------\n");
-		printf("|  N |    Название | Местоположение |       Директор |    Число сотрудников |\n");
-		printf("|----|-------------|----------------|----------------|----------------------|\n");
-		printf("%s %02i %s %11s %s %11s %4s %14s %s %20s %s\n", "|", i+1, "|", Company[i].CompanyName, "|", Company[i].Location, "|", Company[i].Director, "|", Company[i].NumberOfEmployees, "|");
-		printf("|----|-------------|----------------|----------------|----------------------|\n");
-		printf("Введите название компании             >> "); fgets(Company[i].CompanyName, 12, stdin); Company[i].CompanyName[strlen(Company[i].CompanyName) - 1] = 0;
-		if (strlen(Company[i].CompanyName) > 10 || strlen(Company[i].CompanyName) == 0) {
-			printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+	printf(" ---------------------------------------------------------------------------\n");
+	printf("|  N |    Название | Местоположение |       Директор |    Число сотрудников |\n");
+	printf("|----|-------------|----------------|----------------|----------------------|\n");
+	printf("%s %02i %s %11s %s %11s %4s %14s %s %20s %s\n", "|", i + 1, "|", Company[i].CompanyName, "|", Company[i].Location, "|", Company[i].Director, "|", Company[i].NumberOfEmployees, "|");
+	printf("|----|-------------|----------------|----------------|----------------------|\n");
+	printf("Введите название компании             >> "); fgets(Company[i].CompanyName, 12, stdin); Company[i].CompanyName[strlen(Company[i].CompanyName) - 1] = 0;
+	if (strlen(Company[i].CompanyName) > 10 || strlen(Company[i].CompanyName) == 0) {
+		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+		return 0;
+	}
 
-			return 0;
+	printf("Введите местоположение компании (город) >> "); fgets(Company[i].Location, 12, stdin); Company[i].Location[strlen(Company[i].Location) - 1] = 0;
+	if (strlen(Company[i].Location) > 10 || strlen(Company[i].Location) == 0) {
+		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+
+		return 0;
+	}
+
+	printf("Введите фамилию директора               >> "); fgets(Company[i].Director, 12, stdin); Company[i].Director[strlen(Company[i].Director) - 1] = 0;
+	if (strlen(Company[i].Director) > 15 || strlen(Company[i].Director) == 0) {
+		printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
+
+		return 0;
+	}
+
+	printf("Введите численность сотрудников         >> ");
+	j = 0;
+	while ((ch = getchar()) != '\n' && j < 4)
+		if (ch >= 48 && ch <= 57) {
+			IntValueCheck[j] = ch;
+			j++;
 		}
-
-		printf("Введите местоположение компании (город) >> "); fgets(Company[i].Location, 12, stdin); Company[i].Location[strlen(Company[i].Location) - 1] = 0;
-		if (strlen(Company[i].Location) > 10 || strlen(Company[i].Location) == 0) {
-			printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-
-			return 0;
-		}
-
-		printf("Введите фамилию директора               >> "); fgets(Company[i].Director, 12, stdin); Company[i].Director[strlen(Company[i].Director) - 1] = 0;
-		if (strlen(Company[i].Director) > 15 || strlen(Company[i].Director) == 0) {
-			printf("Ошибка ввода, поле было оставлено пустым, или превышенно допустимое количество символов");
-
-			return 0;
-		}
-
-		printf("Введите численность сотрудников         >> ");   
-		j = 0;
-		while ((ch = getchar()) != '\n' && j < 4)
-			if (ch >= 48 && ch <= 57) {
-				IntValueCheck[j] = ch;
-				j++;
-			}
-		IntValueCheck[j] = '\0';
-		strcpy(Company[i].NumberOfEmployees, IntValueCheck);
+	IntValueCheck[j] = '\0';
+	strcpy(Company[i].NumberOfEmployees, IntValueCheck);
 	return 0;
 }
 
