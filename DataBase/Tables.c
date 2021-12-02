@@ -90,22 +90,38 @@ int HintTable3() {
 }*/
 
 void PrintTable1() {
-	int i = 1, page = 10, ch = 0, a; //Setting the counter
+	int i = 0, page = 10, ch = 0, a; //Setting the counter
 	while (ch != 1) {
 		printf("|-----т--------------т-------------т-------------т-------------т-------------т---------------|\n");
-		printf("|  N  |       Модель |    Название | Разработчик | Предприятие |         Тип |     Стоимость |\n");
+		printf("|   N |       Модель |    Название | Разработчик | Предприятие |         Тип |     Стоимость |\n");
 		printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
-		for (i--; i <= page; i++) { //Setting the "for" counter to output array elements by number
-			printf("%s %003i %s %12s %s %11s %s %11s %s %11s %s %11s %s %13s %s\n", "|", i+1, "|", Vechicle[i].Model, "|", Vechicle[i].Appelation, "|", Vechicle[i].Developer, "|", Vechicle[i].Enterprise, "|", Vechicle[i].Type, "|", Vechicle[i].Cost, "|");
+		for (; i < page && i < NumberTable1; i++) { //Setting the "for" counter to output array elements by number
+			printf("%s %003i %s %12s %s %11s %s %11s %s %11s %s %11s %s %13s %s\n", "|", i + 1, "|", Vechicle[i].Model, "|", Vechicle[i].Appelation, "|", Vechicle[i].Developer, "|", Vechicle[i].Enterprise, "|", Vechicle[i].Type, "|", Vechicle[i].Cost, "|");
 			printf("|-----+--------------+-------------+-------------+-------------+-------------+---------------|\n");
 		}
-		printf("Предыдущая страница -  клавиша вверх | Следующая страница -  клавиша вниз | Назад - Esc\n");
-		//printw ("Your i = %d\n", i);
+		printf("Last page - LEFT (<-) | Next page - RIGHT (->) | Exit - BACKSPACE\n");
 		a = _getch();
-		system("cls");
 		if (a == 72) {
-			if (i >= 100) {
-				i = 1;
+			if (i > 11 && i != NumberTable1) {
+				i -= 20;
+				page -= 10;
+				ch = 0;
+			}
+			else if (i == 10) {
+				i = 0;
+				page = 10;
+				ch = 0;
+			}
+			else if (i >= NumberTable1) {
+				page = i - (i%10);
+				i = page - 10;
+				ch = 0;
+			}
+			system("cls");
+		}
+		else if (a == 80) {
+			if (i > NumberTable1) {
+				i = 0;
 				page = 10;
 				ch = 0;
 			}
@@ -113,23 +129,13 @@ void PrintTable1() {
 				page += 10;
 				ch = 0;
 			}
+			system("cls");
 		}
-		if (a == 80) { //Стрелка вврех
-			if (i > 11) {
-				i -= 20;
-				page -= 10;
-				ch = 0;
-			}
-			else if (i == 11) {
-				i = 91;
-				page = 100;
-				ch = 0;
-			}
-		}
-		if (a == 27) {
+		else if (a == 27) {
 			ch = 1;
 		}
 	}
+	a = _getch();
 }
 int PrintTable2()//Функция для вывода информации
 {
